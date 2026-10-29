@@ -1,0 +1,26 @@
+[
+  {
+    "filename": "wifi-crowd-counting-data-01.zip",
+    "size_bytes": 553620104,
+    "sha256": "f9a7821c96f43dad1e25153c5e8712d1cc63b716cbe747f798a3cfbd3dcdfcb8",
+    "file_count": 24
+  },
+  {
+    "filename": "wifi-crowd-counting-data-02.zip",
+    "size_bytes": 531083289,
+    "sha256": "98e9394bbfe7bcfdb4abb9b2de7200247a063a83fef08f7da73f2181bd3cd498",
+    "file_count": 22
+  },
+  {
+    "filename": "wifi-crowd-counting-data-03.zip",
+    "size_bytes": 524777222,
+    "sha256": "98ce725c7a77b6a67c5acdd6773ec8929395e90c9d959a7b814a6e5e6b012873",
+    "file_count": 27
+  },
+  {
+    "filename": "wifi-crowd-counting-data-04.zip",
+    "size_bytes": 292159258,
+    "sha256": "f23ae3861648175232b23689b25fc618410a8211520934eb8d859835aa41832b",
+    "file_count": 22
+  }
+]
