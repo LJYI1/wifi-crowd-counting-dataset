@@ -69,3 +69,31 @@ PowerShell can check an individual file with `Get-FileHash -Algorithm SHA256 -Li
 采集使用 TP-Link TL-WDR7660 路由器作为发射端，搭载 Intel AX210 网卡的笔记本电脑作为接收端，通过 PicoScenes 记录 CSI。配置为 2×2 MIMO、2.472 GHz 中心频率、20 MHz 带宽，收发设备高度为 1.2 米。采集协议包含两个室内环境，参与者以约 1 米/秒在感知区域内随机行走，标称采样率约 60 次/秒，标称单段时长 120 秒。
 
 上述参数描述采集协议，未逐个解码核实所有记录的实际时长和采样率。清单中的人数标签由文件名提取；后缀与采集环境、批次的对应关系尚未提供，不能据此直接认定训练集或测试集。
+
+## Feature extraction / 特征提取
+
+[`paper_algorithm1_features.py`](paper_algorithm1_features.py) provides the feature extraction implementation. Dependencies: Python, NumPy, and SciPy.
+
+```sh
+python -m pip install numpy scipy
+python paper_algorithm1_features.py
+```
+
+Running the script executes a synthetic-data demonstration, not extraction from the raw recording files.
+
+To process decoded CSI windows:
+
+```python
+import numpy as np
+from paper_algorithm1_features import paper_feature_matrix
+
+# csi_windows: complex array shaped [N, 200, 4, 56]
+# train_rows: integer indices or a boolean mask selecting training windows
+features, thresholds = paper_feature_matrix(csi_windows, train_rows)
+# features: float32 array shaped [N, 200, 456]
+# thresholds: dictionary containing tau_L and tau_H
+```
+
+The input must already be decoded and segmented into 200-sample windows with four links and 56 tones. The implementation inserts a zero-valued center tone to form 57 positions. It estimates MAD thresholds and normalization statistics using only `train_rows`; select training windows according to the intended recording/environment split before calling it. This function does not return normalization statistics for reuse in a separate inference call.
+
+该脚本提供特征提取实现，依赖 NumPy 和 SciPy。直接运行时使用合成数据演示；不包含原始 `.csi` 文件解析器。实际使用需先将数据解析为形状 `[N, 200, 4, 56]` 的复数数组，并指定训练窗口索引 `train_rows`，输出为 `[N, 200, 456]` 的特征矩阵及 MAD 阈值。代码会插入零值中心子载波位置；阈值和标准化统计量仅从指定训练窗口估计，且当前接口不返回可供独立推理复用的标准化统计量。
